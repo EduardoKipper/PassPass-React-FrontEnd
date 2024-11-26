@@ -1,5 +1,9 @@
 .App {
   text-align: center;
+  background: linear-gradient(to bottom, #001433, #004ebb);
+  background-size: cover; /* Faz com que o fundo ocupe toda a página */
+  background-repeat: no-repeat; /* Evita que o fundo se repita */
+  height: 100vh;
 }
 
 .App-logo {
