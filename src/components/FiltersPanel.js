@@ -7,21 +7,28 @@ const FiltersPanel = ({ options, onOptionsChange }) => {
   };
 
   const handleUseNumbersChange = (e) => {
-    onOptionsChange({ ...options, onlyNumbers: e.target.checked });
+    onOptionsChange({ ...options, use_numbers: e.target.checked });
   };
 
   const handleUseSpecialChange = (e) => {
-    onOptionsChange({ ...options, noSpecial: !e.target.checked });
+    onOptionsChange({ ...options, use_special: e.target.checked });
   };
 
-  const handleOnlyUpperCaseChange = (e) => {
-    onOptionsChange({ ...options, onlyUpperCase: e.target.checked });
+const handleOnlyUpperCaseChange = (e) => {
+    if (e.target.checked) {
+      onOptionsChange({ ...options, only_upper_case: true, only_lower_case: false });
+    } else {
+      onOptionsChange({ ...options, only_upper_case: false });
+    }
   };
 
   const handleOnlyLowerCaseChange = (e) => {
-    onOptionsChange({ ...options, onlyLowerCase: e.target.checked });
+    if (e.target.checked) {
+      onOptionsChange({ ...options, only_lower_case: true, only_upper_case: false });
+    } else {
+      onOptionsChange({ ...options, only_lower_case: false });
+    }
   };
-
   return (
     <div className="filters-panel">
       <label className="char-count-label">
@@ -29,15 +36,15 @@ const FiltersPanel = ({ options, onOptionsChange }) => {
         <input
           type="number"
           min="4"
-          max="32"
-          value={options.charCount || 16}
+          max="12"
+          value={options.charCount || 12}
           onChange={handleCharCountChange}
         />
       </label>
       <label className="checkbox-label">
         <input
           type="checkbox"
-          checked={!!options.onlyNumbers}
+          checked={options.use_numbers === undefined ? true : options.use_numbers}
           onChange={handleUseNumbersChange}
         />
         Usar números
@@ -45,7 +52,7 @@ const FiltersPanel = ({ options, onOptionsChange }) => {
       <label className="checkbox-label">
         <input
           type="checkbox"
-          checked={options.noSpecial === undefined ? true : !options.noSpecial}
+          checked={options.use_special === undefined ? true : options.use_special}
           onChange={handleUseSpecialChange}
         />
         Usar caracteres especiais
@@ -53,7 +60,7 @@ const FiltersPanel = ({ options, onOptionsChange }) => {
       <label className="checkbox-label">
         <input
           type="checkbox"
-          checked={!!options.onlyUpperCase}
+          checked={!!options.only_upper_case}
           onChange={handleOnlyUpperCaseChange}
         />
         Apenas letras maiúsculas
@@ -61,7 +68,7 @@ const FiltersPanel = ({ options, onOptionsChange }) => {
       <label className="checkbox-label">
         <input
           type="checkbox"
-          checked={!!options.onlyLowerCase}
+          checked={!!options.only_lower_case}
           onChange={handleOnlyLowerCaseChange}
         />
         Apenas letras minúsculas

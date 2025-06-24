@@ -42,18 +42,21 @@ class PasswordGen extends Component {
 
 
     gerarSenha = async () => {
-        // Monta o body conforme o schema Pydantic do backend, sempre enviando todas as opções
-        const { keyword, options } = this.state;
+        const { keyword } = this.state;
+        let { options } = this.state;
+        // Corrige nomes e valores dos campos vindos do painel
+        options = {
+            chars: Number(options.chars || options.charCount) || 12,
+            use_numbers: options.use_numbers !== undefined ? options.use_numbers : true,
+            use_special: options.use_special !== undefined ? options.use_special : true,
+            only_upper_case: options.only_upper_case || false,
+            only_lower_case: options.only_lower_case || false
+        };
+
         const reqBody = {
             auth: { user: "" },
-            keyword: keyword.filter(k => k && k.trim() !== ''),
-            options: {
-                chars: Number(options.chars) || 16,
-                use_numbers: options.use_numbers !== undefined ? options.use_numbers : true,
-                use_special: options.use_special !== undefined ? options.use_special : true,
-                only_upper_case: options.only_upper_case !== undefined ? options.only_upper_case : false,
-                only_lower_case: options.only_lower_case !== undefined ? options.only_lower_case : false
-            }
+            keyword: Array.isArray(keyword) ? keyword.filter(k => k && k.trim() !== '') : [],
+            options: options
         };
         console.log('Body enviado:', reqBody);
         try {
@@ -90,7 +93,7 @@ class PasswordGen extends Component {
         const { keyword, password, showModal, options } = this.state;
 
         return (
-            <div className="PassPassGen" style={{ height: '80vh', maxHeight: '80vh', overflowY: (this.state.showFiltersPanel || password) ? 'auto' : 'unset' }}>
+            <div className="PassPassGen" style={{ height: '80vh', maxHeight: '80vh'}}>
                 <div className='container'>
                     <h2>Gerador de Senhas</h2>
                     <p>Crie senhas fortes e seguras com base em palavras-chave.</p>
