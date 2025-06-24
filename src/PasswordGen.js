@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 import api from './Api';
 import './PasswordGen.css';
 import PaperclipIcon from './assets/paperclip.svg'
+import KeywordInput from './components/KeywordInput';
+import GenericButton from './components/GenericButton';
+import FilterButton from './components/FilterButton';
+import FiltersPanel from './components/FiltersPanel';
+
 
 class PasswordGen extends Component {
     constructor(props) {
@@ -12,11 +17,12 @@ class PasswordGen extends Component {
             options: {},
             password: '',
             showModal: false,
-            showPassword: [false, false, false], // Adicionado para mostrar/ocultar palavras
-            showGeneratedPassword: false // Adicionado para mostrar/ocultar senha gerada
+            showPassword: [false, false, false],
+            showGeneratedPassword: false,
+            showFiltersPanel: false
         };
-        
-        
+
+
     }
 
     handleChange = (event) => {
@@ -33,21 +39,38 @@ class PasswordGen extends Component {
         }
     };
 
-    
+
 
     gerarSenha = async () => {
-        const { auth, keyword, options } = this.state;
-        const reqBody = { auth, keyword, options };
-        console.log(reqBody);
+        // Garante o formato correto do body para o backend
+        const { keyword, options } = this.state;
+        const reqBody = {
+            auth: { user: null },
+            keyword: keyword.filter(k => k && k.trim() !== ''),
+            options: {
+                chars: Number(options.charCount) || 16,
+                use_numbers: options.use_numbers !== undefined ? options.use_numbers : true,
+                use_special: options.use_special !== undefined ? options.use_special : true,
+                only_upper_case: options.only_upper_case || false,
+                only_lower_case: options.only_lower_case || false
+            }
+        };
+        console.log('Body enviado:', reqBody);
         try {
             const response = await api.post('/api/password', reqBody);
-            console.log('Resposta da API:', response.data);
-            if (response.data && response.data.password) {
-                this.setState({ password: response.data.password });
+            const data = response.data;
+            console.log('Resposta da API:', data);
+            if (data && data.status_code === 200 && data.password) {
+                this.setState({ password: data.password });
+            } else if (data && data.description) {
+                alert('Erro ao gerar senha: ' + data.description);
+                console.error('Resposta da API:', data);
             } else {
-                console.error('Resposta da API não contém senha');
+                alert('Erro desconhecido ao gerar senha.');
+                console.error('Resposta inesperada da API:', data);
             }
         } catch (error) {
+            alert('Erro de conexão ao gerar senha.');
             console.error('Erro ao gerar a senha:', error);
         }
     };
@@ -57,52 +80,60 @@ class PasswordGen extends Component {
         navigator.clipboard.writeText(password);
         this.setState({ showModal: true });
     };
-    
+
     closeModal = () => {
         this.setState({ showModal: false });
     };
-    
+
 
     render() {
-        const { keyword, password, showModal } = this.state;
-    
+        const { keyword, password, showModal, options } = this.state;
+
         return (
-            <div className="PassPassGen">
-                <h1>PassPass</h1>
+            <div className="PassPassGen" style={{ height: '80vh', maxHeight: '80vh', overflowY: (this.state.showFiltersPanel || password) ? 'auto' : 'unset' }}>
                 <div className='container'>
+                    <h2>Gerador de Senhas</h2>
+                    <p>Crie senhas fortes e seguras com base em palavras-chave.</p>
                     <div className='Palavras'>
-                        <div className='palavras'>
-                            <label htmlFor="palavra1">Palavra 1</label>
-                            <input
-                                type="text"
-                                name="palavra1"
-                                placeholder="  Digite aqui sua palavra chave"
-                                value={keyword[0]}
-                                onChange={this.handleChange}
-                            />
-                        </div>
-                        <div className='palavras'>
-                            <label htmlFor="palavra2">Palavra 2</label>
-                            <input
-                                type="text"
-                                name="palavra2"
-                                placeholder="  Digite aqui sua palavra chave"
-                                value={keyword[1]}
-                                onChange={this.handleChange}
-                            />
-                        </div>
-                        <div className='palavras'>
-                            <label htmlFor="palavra3">Palavra 3</label>
-                            <input
-                                type="text"
-                                name="palavra3"
-                                placeholder="  Digite aqui sua palavra chave"
-                                value={keyword[2]}
-                                onChange={this.handleChange}
-                            />
-                        </div>
+                        <KeywordInput
+                            label="Palavra 1"
+                            name="palavra1"
+                            placeholder="  Digite aqui sua palavra chave"
+                            value={keyword[0]}
+                            onChange={this.handleChange}
+                        />
+                        <KeywordInput
+                            label="Palavra 2"
+                            name="palavra2"
+                            placeholder="  Digite aqui sua palavra chave"
+                            value={keyword[1]}
+                            onChange={this.handleChange}
+                        />
+                        <KeywordInput
+                            label="Palavra 3"
+                            name="palavra3"
+                            placeholder="  Digite aqui sua palavra chave"
+                            value={keyword[2]}
+                            onChange={this.handleChange}
+                        />
                     </div>
-                    <button onClick={this.gerarSenha}>Gerar Senha</button>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: 12 }}>
+                        <GenericButton onClick={this.gerarSenha}>
+                            Gerar Senha
+                        </GenericButton>
+                        <FilterButton
+                            onToggle={() => this.setState({ showFiltersPanel: !this.state.showFiltersPanel })}
+                            selected={this.state.showFiltersPanel}
+                        />
+                    </div>
+                    <div
+                        style={{ marginTop: 16, display: this.state.showFiltersPanel ? 'flex' : 'none', justifyContent: 'center', width: '100%' }}
+                    >
+                        <FiltersPanel
+                            options={options}
+                            onOptionsChange={(opts) => this.setState({ options: opts })}
+                        />
+                    </div>
                     {password && (
                         <div>
                             <input type="text" value={password} readOnly />
@@ -124,6 +155,6 @@ class PasswordGen extends Component {
             </div>
         );
     }
-        }
+}
 
 export default PasswordGen;
