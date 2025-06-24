@@ -42,17 +42,17 @@ class PasswordGen extends Component {
 
 
     gerarSenha = async () => {
-        // Garante o formato correto do body para o backend
+        // Monta o body conforme o schema Pydantic do backend, sempre enviando todas as opções
         const { keyword, options } = this.state;
         const reqBody = {
-            auth: { user: null },
+            auth: { user: "" },
             keyword: keyword.filter(k => k && k.trim() !== ''),
             options: {
-                chars: Number(options.charCount) || 16,
+                chars: Number(options.chars) || 16,
                 use_numbers: options.use_numbers !== undefined ? options.use_numbers : true,
                 use_special: options.use_special !== undefined ? options.use_special : true,
-                only_upper_case: options.only_upper_case || false,
-                only_lower_case: options.only_lower_case || false
+                only_upper_case: options.only_upper_case !== undefined ? options.only_upper_case : false,
+                only_lower_case: options.only_lower_case !== undefined ? options.only_lower_case : false
             }
         };
         console.log('Body enviado:', reqBody);
