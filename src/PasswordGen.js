@@ -44,7 +44,6 @@ class PasswordGen extends Component {
     gerarSenha = async () => {
         const { keyword } = this.state;
         let { options } = this.state;
-        // Corrige nomes e valores dos campos vindos do painel
         options = {
             chars: Number(options.chars || options.charCount) || 12,
             use_numbers: options.use_numbers !== undefined ? options.use_numbers : true,
@@ -93,8 +92,27 @@ class PasswordGen extends Component {
         const { keyword, password, showModal, options } = this.state;
 
         return (
-            <div className="PassPassGen" style={{ height: '80vh', maxHeight: '80vh'}}>
-                <div className='container'>
+            <div className="PassPassGen" style={{
+                height: '80vh',
+                maxHeight: '80vh',
+                minHeight: '80vh',
+                width: '100%',
+                maxWidth: 500,
+                margin: '0 auto',
+                overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                boxSizing: 'border-box',
+            }}>
+                <div className='container' style={{
+                    height: '100%',
+                    maxHeight: '100%',
+                    overflowY: 'auto',
+                    width: '100%',
+                    boxSizing: 'border-box',
+                }}>
                     <h2>Gerador de Senhas</h2>
                     <p>Crie senhas fortes e seguras com base em palavras-chave.</p>
                     <div className='Palavras'>
@@ -138,7 +156,7 @@ class PasswordGen extends Component {
                         />
                     </div>
                     {password && (
-                        <div>
+                        <div style={{ marginTop: 32 }}>
                             <input type="text" value={password} readOnly />
                             <button onClick={this.copiarSenha}>Copiar</button>
                         </div>
