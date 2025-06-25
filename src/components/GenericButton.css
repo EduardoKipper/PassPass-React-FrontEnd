@@ -1,0 +1,28 @@
+.generic-button {
+  width: 70%;
+  background: linear-gradient(to right, #0046B0, #5AD7FF);
+  color: white;
+  border: none;
+  padding: 10px 0;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-bottom: 40px;
+  transition: background 0.2s;
+}
+
+.generic-button:hover {
+  background: linear-gradient(to right, #003688, #47a9ca);
+}
+
+@media (max-width: 768px) {
+  .generic-button {
+    width: 80%;
+  }
+}
+
+@media (max-width: 480px) {
+  .generic-button {
+    width: 100%;
+  }
+}

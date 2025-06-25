@@ -1,0 +1,152 @@
+.filter-dropdown-wrapper {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  margin-left: 0;
+  z-index: 100;
+  width: auto;
+}
+
+.filter-btn {
+  display: inline-flex;
+  align-items: center;
+  background: #fff;
+  color: #004e92;
+  border: 1px solid #004e92;
+  border-radius: 25px;
+  padding: 8px 14px 8px 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  font-weight: 600;
+  width: auto;
+  min-width: 0;
+  max-width: none;
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: unset;
+}
+
+.filter-btn:hover {
+  background: #f0f0f0;
+  color: #003366;
+}
+
+.filter-btn.selected {
+  background: #bdbdbd;
+  color: #fff;
+  border: 1px solid #bdbdbd;
+}
+
+.filter-btn.selected .filter-icon {
+  filter: brightness(0) invert(1);
+}
+
+@media (max-width: 480px) {
+  .filter-btn {
+    font-size: 0.95rem;
+    padding: 8px 8px 8px 6px;
+  }
+}
+
+.filter-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+.filter-dropdown {
+  position: static;
+  margin-top: 16px;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #004e92;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  padding: 20px 28px 20px 20px;
+  z-index: 100;
+  min-width: 240px;
+  width: max-content;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  animation: filter-fade-in 0.18s ease;
+}
+
+@keyframes filter-fade-in {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.filter-dropdown label {
+  color: #004e92;
+  font-size: 1rem;
+  font-weight: 500;
+  width: 100%;
+  text-align: left;
+  margin-bottom: 12px;
+  gap: 4px;
+}
+
+/* Apenas para o campo de quantidade de caracteres */
+.filter-dropdown label.char-count-label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Mantém os checkboxes inline com o texto */
+.checkbox-label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  margin-bottom: 0;
+}
+
+.filter-dropdown input[type="number"] {
+  width: 100px;
+  margin-left: 0;
+  margin-top: 4px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.filter-dropdown-inline {
+  position: static !important;
+  left: 0;
+  right: 0;
+  top: auto;
+  background: #fff;
+  border: 1px solid #004e92;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  padding: 20px 28px 20px 20px;
+  z-index: 10;
+  min-width: 240px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+@media (max-width: 480px) {
+  .filter-dropdown {
+    min-width: 0;
+    width: 100%;
+    padding: 12px 6px;
+  }
+  .filter-dropdown-inline {
+    min-width: 0;
+    width: 100%;
+    padding: 12px 6px;
+  }
+}

@@ -1,70 +1,81 @@
-# Getting Started with Create React App
+# Documentação Técnica - PassPass React FrontEnd
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Visão Geral
 
-## Available Scripts
+O PassPass é um sistema web para geração de senhas seguras, customizáveis e responsivas, desenvolvido em ReactJS. O frontend permite ao usuário gerar senhas a partir de palavras-chave, aplicar filtros avançados e copiar a senha gerada de forma prática, com feedback visual. O sistema integra-se a um backend via API REST para geração da senha.
 
-In the project directory, you can run:
+## Estrutura de Pastas
 
-### `npm start`
+- `src/components/` - Componentes reutilizáveis da interface, incluindo:
+  - `PasswordGen.js` e `PasswordGen.css`: Componente principal de geração de senhas.
+  - `KeywordInput.js`: Campo de entrada para palavras-chave.
+  - `GenericButton.js`, `FilterButton.js`: Botões reutilizáveis e botão de filtro.
+  - `FiltersPanel.js`: Painel de filtros customizáveis.
+  - `MatrixRain.js`: Efeito visual animado de caracteres caindo (estilo Matrix).
+- `src/assets/` - Ícones SVG utilizados nos filtros e interface.
+- `src/Api.js` - Configuração do axios para integração com o backend.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Principais Funcionalidades
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Geração de Senhas
+- O usuário informa até 3 palavras-chave.
+- Pode customizar a senha usando filtros:
+  - Quantidade de caracteres
+  - Permitir/proibir números
+  - Permitir/proibir caracteres especiais
+  - Apenas letras maiúsculas/minúsculas
+  - Somente números
+- O painel de filtros é expansível e exibe ícones ilustrativos.
+- O layout é responsivo e centralizado.
+- Ao gerar a senha, o frontend envia um POST para `/api/password` com o seguinte body:
 
-### `npm test`
+```json
+{
+  "auth": { "user": "" },
+  "keyword": ["palavra1", "palavra2", "palavra3"],
+  "options": {
+    "chars": 12,
+    "use_numbers": true,
+    "use_special": true,
+    "only_numbers": false,
+    "only_upper_case": false,
+    "only_lower_case": false
+  }
+}
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- O backend responde com a senha gerada e status.
+- A senha gerada é exibida e pode ser copiada para a área de transferência.
+- Um modal de confirmação é exibido ao copiar a senha.
 
-### `npm run build`
+### Experiência Visual
+- O painel de filtros exibe ícones SVG ao lado de cada opção.
+- O botão de filtro muda de cor ao ser ativado.
+- O efeito MatrixRain é exibido no painel lateral.
+- O layout se adapta a diferentes tamanhos de tela.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Integração Backend
+- O frontend espera um backend compatível com FastAPI, recebendo o body conforme o schema acima.
+- O backend deve responder com um JSON contendo `status_code`, `password` e `description`.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Scripts Disponíveis
+- `npm install`: Executa a instalacao dos pacotes requeridos para o app.
+- `npm start`: Executa o app em modo desenvolvimento.
+- `npm test`: Executa os testes (ainda nao desenvolvidos).
+- `npm run build`: Gera a build de produção.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Observações Técnicas
+- O código segue boas práticas de componentização e reutilização.
+- O painel de filtros é dinâmico e esconde opções incompatíveis (ex: ao marcar "Somente números").
+- O sistema é facilmente extensível para novos filtros ou integrações.
 
-### `npm run eject`
+## Requisitos
+- Node.js >= 14
+- Backend compatível com o contrato de API descrito acima.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Autores
+- Equipe PassPass
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Para dúvidas técnicas, consulte os arquivos fonte em `src/components` e a documentação inline dos componentes.
