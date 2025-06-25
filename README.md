@@ -59,8 +59,9 @@ O PassPass é um sistema web para geração de senhas seguras, customizáveis e 
 - O backend deve responder com um JSON contendo `status_code`, `password` e `description`.
 
 ## Scripts Disponíveis
+- `npm install`: Executa a instalacao dos pacotes requeridos para o app.
 - `npm start`: Executa o app em modo desenvolvimento.
-- `npm test`: Executa os testes.
+- `npm test`: Executa os testes (ainda nao desenvolvidos).
 - `npm run build`: Gera a build de produção.
 
 ## Observações Técnicas
