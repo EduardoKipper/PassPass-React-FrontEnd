@@ -1,30 +1,40 @@
 import React, { Component } from 'react';
-import api from './Api';
+import api from '../Api';
 import './PasswordGen.css';
-import PaperclipIcon from './assets/paperclip.svg'
-import KeywordInput from './components/KeywordInput';
-import GenericButton from './components/GenericButton';
-import FilterButton from './components/FilterButton';
-import FiltersPanel from './components/FiltersPanel';
+import PaperclipIcon from '../assets/paperclip.svg';
+import KeywordInput from './KeywordInput';
+import GenericButton from './GenericButton';
+import FilterButton from './FilterButton';
+import FiltersPanel from './FiltersPanel';
 
-
+/**
+ * Componente principal responsável pela geração de senhas.
+ * Gerencia o estado dos campos, opções de filtro, integração com backend e exibição dos resultados.
+ * - Controla a exibição do painel de filtros e modal de confirmação.
+ * - Realiza a chamada à API para geração da senha conforme as opções selecionadas.
+ * - Mantém o layout centralizado e integra os componentes visuais auxiliares.
+ */
 class PasswordGen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            auth: {},
-            keyword: ["", "", ""],
-            options: {},
-            password: '',
-            showModal: false,
-            showPassword: [false, false, false],
-            showGeneratedPassword: false,
-            showFiltersPanel: false
+            auth: {}, // Dados de autenticação (pode ser expandido para multiusuário)
+            keyword: ["", "", ""], // Palavras-chave informadas pelo usuário
+            options: {}, // Opções de filtro para geração da senha
+            password: '', // Senha gerada
+            showModal: false, // Controle do modal de confirmação
+            showPassword: [false, false, false], // Controle de exibição dos campos de senha
+            showGeneratedPassword: false, // Exibe/oculta senha gerada
+            showFiltersPanel: false // Exibe/oculta painel de filtros
         };
-
-
     }
 
+    /**
+     * Atualiza o estado dos campos de palavra-chave e demais opções.
+     * Permite controle individual dos inputs.
+     * - Se o campo for uma palavra-chave, atualiza o array correspondente.
+     * - Para outros campos, atualiza diretamente o estado.
+     */
     handleChange = (event) => {
         const { name, value } = event.target;
         if (name.startsWith('palavra')) {
@@ -39,8 +49,13 @@ class PasswordGen extends Component {
         }
     };
 
-
-
+    /**
+     * Monta o body da requisição e realiza chamada à API para gerar a senha.
+     * Garante que apenas palavras-chave válidas sejam enviadas.
+     * Atualiza o estado com a resposta do backend.
+     * - Valida e normaliza as opções de filtro antes do envio.
+     * - Exibe alertas em caso de erro de integração ou resposta inesperada.
+     */
     gerarSenha = async () => {
         const { keyword } = this.state;
         let { options } = this.state;
@@ -78,22 +93,28 @@ class PasswordGen extends Component {
         }
     };
 
+    /**
+     * Copia a senha gerada para a área de transferência e exibe modal de confirmação.
+     */
     copiarSenha = () => {
         const { password } = this.state;
         navigator.clipboard.writeText(password);
         this.setState({ showModal: true });
     };
 
+    /**
+     * Fecha o modal de confirmação de cópia.
+     */
     closeModal = () => {
         this.setState({ showModal: false });
     };
-
 
     render() {
         const { keyword, password, showModal, options } = this.state;
 
         return (
             <div className="PassPassGen" style={{
+                // Layout centralizado, altura fixa e scroll interno para responsividade
                 height: '80vh',
                 maxHeight: '80vh',
                 minHeight: '80vh',
@@ -117,6 +138,7 @@ class PasswordGen extends Component {
                     <h2>Gerador de Senhas</h2>
                     <p>Crie senhas fortes e seguras com base em palavras-chave.</p>
                     <div className='Palavras'>
+                        {/* Inputs de palavras-chave reutilizando componente KeywordInput */}
                         <KeywordInput
                             label="Palavra 1"
                             name="palavra1"
@@ -140,6 +162,7 @@ class PasswordGen extends Component {
                         />
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: 12 }}>
+                        {/* Botão de geração e botão de filtro com estado visual */}
                         <GenericButton onClick={this.gerarSenha}>
                             Gerar Senha
                         </GenericButton>
@@ -151,6 +174,7 @@ class PasswordGen extends Component {
                     <div
                         style={{ marginTop: 16, display: this.state.showFiltersPanel ? 'flex' : 'none', justifyContent: 'center', width: '100%' }}
                     >
+                        {/* Painel de filtros customizável, exibe opções dinâmicas */}
                         <FiltersPanel
                             options={options}
                             onOptionsChange={(opts) => this.setState({ options: opts })}
@@ -158,6 +182,7 @@ class PasswordGen extends Component {
                     </div>
                     {password && (
                         <div style={{ marginTop: 32 }}>
+                            {/* Exibe senha gerada e botão de cópia */}
                             <input type="text" value={password} readOnly />
                             <button onClick={this.copiarSenha}>Copiar</button>
                         </div>
