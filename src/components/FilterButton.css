@@ -34,9 +34,9 @@
 }
 
 .filter-btn.selected {
-  background: linear-gradient(to right, #0046B0, #5AD7FF);
+  background: #bdbdbd;
   color: #fff;
-  border: 1px solid #0046B0;
+  border: 1px solid #bdbdbd;
 }
 
 .filter-btn.selected .filter-icon {

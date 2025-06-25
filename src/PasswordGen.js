@@ -48,6 +48,7 @@ class PasswordGen extends Component {
             chars: Number(options.chars || options.charCount) || 12,
             use_numbers: options.use_numbers !== undefined ? options.use_numbers : true,
             use_special: options.use_special !== undefined ? options.use_special : true,
+            only_numbers: options.only_numbers || false,
             only_upper_case: options.only_upper_case || false,
             only_lower_case: options.only_lower_case || false
         };
